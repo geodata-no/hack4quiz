@@ -217,7 +217,7 @@ function showNextQuestion(){
 		var q = questions[questionID];
 
 
-		correctAnswer = q.answer;
+		correctAnswer = q.answer.split("-").join(" ");
 
 		q.func(q.identifier, q.action); 
 		console.log("Spørsmål.."+q.ask);
@@ -262,7 +262,7 @@ function initProgressBar(){
 
 $(window).on("questionDone", function(points){
 	console.log(points);
-	totalScore+= points;
+	totalScore+= points.points;
 	showNextQuestion();
 });
 

@@ -2,6 +2,9 @@
 /* global d3 */
 'use strict';
 
+var fylkeAnswers = $.getJSON("geo/fylker.geojson");
+var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
+
 (function () {
 
 	var width  = window.innerWidth;
@@ -133,6 +136,21 @@ function generateQuestions(numQuestions)
 		answer: null
 	}
 	
+	
+	
+	var fylkeFeatures = []
+	fylkeAnswers.done(function(data){
+		console.log(data);
+	    fylkeFeatures = data.features;
+	});
+	
+	
+	var kommuneFeatures = [];
+	kommuneAnswers.done(function(data){
+		console.log(data);
+	    kommuneFeatures = data.features;
+	});
+	
 	var categories = [{
 		name:"fylke",
 		useFunc: getFylke,
@@ -146,12 +164,15 @@ function generateQuestions(numQuestions)
 		twists: [drawLine, zoomIn]
 	}]
 	
+	
+	
+
 	for(var i = 0; i < numQuestions; i++){
 		
 		//Fylke eller kommune
 		//Find category
 		var category = categories[randInt(0,categories.length)];
-		console.log(category);
+		
 		
 		var identifier = randInt(0,category.choices);
 		
@@ -160,9 +181,16 @@ function generateQuestions(numQuestions)
 			func: category.useFunc,
 			identifier: identifier,
 			action: category.twists[randInt(0, category.twists.length)],
-			answer: "Buskerud"
+			answer: null
 		}
-		console.log(question);
+		if(category.name=="kommune"){
+			question.answer = kommuneFeatures[identifier].properties.NAVN
+			question.ask = "Hvilken kommune er dette?";
+		}else if(category.name=="fylke"){ 
+			question.answer = fylkeFeatures[identifier].properties.NAVN
+			question.ask = "Hvilket fylke er dette?";
+		}
+		console.log(question)
 			questions.push(question);
 	}
 	return questions;
@@ -170,7 +198,7 @@ function generateQuestions(numQuestions)
 
 
 
-var questions = generateQuestions(3);
+var questions = null;
 
 var totalScore = 0;
 var questionID = 0;
@@ -217,6 +245,8 @@ $(window).on("questionDone", function(points){
 //	getFylke(5, zoomIn);
 
 	// getKommune(425, drawLine);
+setTimeout(function(){
+	questions= generateQuestions(3);
 showNextQuestion(); //Start the game
-	
+}, 1000);
 })();

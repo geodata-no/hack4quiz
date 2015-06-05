@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+
 .browsehappy {
   margin: 0.2em 0;
   background: #ccc;
@@ -15,6 +17,7 @@ body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
   background-color: #EFC94C;
+  font-family: 'Open Sans';
 }
 .footer {
   position: absolute;
@@ -42,4 +45,24 @@ body {
   position: fixed;
   top:0;
   left: 0;
+}
+
+#progressbar{
+  position: fixed !important;
+  right: 10px;
+  bottom: 10px;
+  width: 300px;
+  height: 300px;
+
+}
+
+.progressbar-text{
+    font-size: 128px;
+  color: white !important;
+}
+
+#logo{
+  position: fixed;
+  left: 10px;
+  bottom: 10px;
 }

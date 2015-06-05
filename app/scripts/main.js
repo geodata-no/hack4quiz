@@ -10,6 +10,7 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 	var width  = window.innerWidth;
 	var height = window.innerHeight;
 
+
 	var vis = d3.select('#vis').append('svg')
 	.attr('width', width).attr('height', height);
 
@@ -60,7 +61,7 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 		.attr('stroke-dasharray', totalLength + ' ' + totalLength)
 		.attr('stroke-dashoffset', totalLength)
 		.transition()
-		.duration(20000)
+		.duration(13000)
 		.ease('linear')
 		.attr('stroke-dashoffset', 0).each("end", function(){
 			OnQuestionDone(10);
@@ -68,7 +69,7 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 	}
 
 	function zoomIn(path, projection, fylke){
-	
+
 		
 		var targetScale = projection.scale();
 		projection
@@ -85,7 +86,7 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 		.attr('d', fylke).each("end", function(){
 			OnQuestionDone(10);
 		});
-}
+	}
 	
 
 	function isCorrect(guess, recognition){
@@ -120,11 +121,11 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 		}
 	}
 
+	function randInt(min, max)
+	{
+		return Math.floor(Math.random()*(max-min)+min);
+	}
 
-function randInt(min, max)
-{
-	return Math.floor(Math.random()*(max-min)+min);
-}
 
 function generateQuestions(numQuestions)
 {
@@ -190,8 +191,10 @@ function generateQuestions(numQuestions)
 			question.answer = fylkeFeatures[identifier].properties.NAVN
 			question.ask = "Hvilket fylke er dette?";
 		}
+
 		console.log(question)
-			questions.push(question);
+		questions.push(question);
+
 	}
 	return questions;
 }
@@ -210,25 +213,51 @@ function showNextQuestion(){
 		console.log("FERDIG: "+ totalScore +" poeng");
 		
 	}else{
-	
-var q = questions[questionID];
-	
-	
-	correctAnswer = q.answer;
-	
-	q.func(q.identifier, q.action); 
-	console.log("Spørsmål.."+q.ask);
-	questionID++;
+
+		var q = questions[questionID];
+
+
+		correctAnswer = q.answer;
+
+		q.func(q.identifier, q.action); 
+		console.log("Spørsmål.."+q.ask);
+		$('#question-text').html(q.ask);
+		questionID++;
 	}
+	progressbar.destroy();
+	progressbar = initProgressBar();
+
+	progressbar.animate(-1, function() {
+		console.log('tiden er ute!');
+	});
 }
 
 function OnQuestionDone(points) {
-    var evt = $.Event('questionDone');
-    evt.points = points;
+	var evt = $.Event('questionDone');
+	evt.points = points;
 
-    vis.selectAll('path').remove();
-    $(window).trigger(evt);
+	vis.selectAll('path').remove();
+	$(window).trigger(evt);
 }
+
+function initProgressBar(){
+	var circle = new ProgressBar.Circle('#progressbar', {
+		color: 'white',
+		strokeWidth: 3,
+		trailWidth: 2,
+		trailColor: 'black',
+		duration: 13000,
+		text: {
+			value: '0'
+		},
+		step: function(state, bar) {
+			bar.setText((1000 - bar.value() * -999).toFixed(0));
+		}
+	});
+
+	return circle;
+}
+
 
 
 $(window).on("questionDone", function(points){
@@ -237,9 +266,8 @@ $(window).on("questionDone", function(points){
 	showNextQuestion();
 });
 
+var progressbar = initProgressBar();
 	//getFylke(5, zoomIn);
-
-	
 	var correctAnswer = 'buskerud';
 	// startVoiceMonitoring();
 //	getFylke(5, zoomIn);
@@ -249,4 +277,5 @@ setTimeout(function(){
 	questions= generateQuestions(3);
 showNextQuestion(); //Start the game
 }, 1000);
+
 })();

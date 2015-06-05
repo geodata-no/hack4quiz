@@ -58,7 +58,7 @@ function drawLine(path){
 	.transition()
 	.duration(20000)
 	.ease("linear")
-	.attr("stroke-dashoffset", 0);
+	.attr("stroke-dashoffset", 0).each("end", function(){	OnQuestionDone(0);});
 }
 
 function zoomIn(path, projection, fylke){
@@ -74,10 +74,105 @@ function zoomIn(path, projection, fylke){
 	vis.selectAll("path")
 	.transition()
 	.duration(13000)
-	.attr("d", fylke);
+	.attr("d", fylke).each("end", function(){	OnQuestionDone(1);});
+	
+	
+
 }
 
-	getFylke(5, zoomIn);
+function randInt(min, max)
+{
+	return Math.floor(Math.random()*(max-min)+min);
+}
+
+function generateQuestions(numQuestions)
+{
+	var questions = []
+	var question = {
+		func: null,
+		identifier: null,
+		action: null,
+		answer: null
+	}
+	
+	var categories = [{
+		name:"fylke",
+		useFunc: getFylke,
+		choices: 19,
+		twists: [drawLine, zoomIn]
+		
+	}, {
+		name:"kommune",
+		useFunc: getKommune,
+		choices: 419,
+		twists: [drawLine, zoomIn]
+	}]
+	
+	for(var i = 0; i < numQuestions; i++){
+		
+		//Fylke eller kommune
+		//Find category
+		var category = categories[randInt(0,categories.length)];
+		console.log(category);
+		
+		var identifier = randInt(0,category.choices);
+		
+		var question = {
+			ask: "Hvilken "+category.name +" er dette?",
+			func: category.useFunc,
+			identifier: identifier,
+			action: category.twists[randInt(0, category.twists.length)],
+			answer: "Buskerud"
+		}
+		console.log(question);
+			questions.push(question);
+	}
+	return questions;
+}
+
+
+
+var questions = generateQuestions(3);
+
+var totalScore = 0;
+var questionID = 0;
+
+
+function showNextQuestion(){
+	
+	if(questionID == questions.length){
+		console.log("FERDIG: "+ totalScore +" poeng");
+		
+	}else{
+	
+var q = questions[questionID];
+	
+	q.name
+	
+	q.func(q.identifier, q.action); 
+	console.log("Spørsmål..");
+	questionID++;
+	}
+}
+
+function OnQuestionDone(points) {
+    var evt = $.Event('questionDone');
+    evt.points = points;
+
+    $(window).trigger(evt);
+}
+
+
+$(window).on("questionDone", function(points){
+	console.log(points);
+	totalScore+= points;
+	showNextQuestion();
+});
+
+showNextQuestion(); //Start the game
+
+
+	//getFylke(5, zoomIn);
 	// getKommune(425, drawLine);
 
 

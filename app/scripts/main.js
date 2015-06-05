@@ -81,6 +81,40 @@
 		.attr('d', fylke);
 	}
 
+	function isCorrect(guess, recognition){
+		if(guess === correctAnswer){
+			console.log('HELT RETT!');
+			recognition.stop();
+		}
+		console.log(guess);
+	}
+
+	function startVoiceMonitoring(){
+		var recognition = new webkitSpeechRecognition();
+		recognition.continuous = true; 
+		recognition.interimResults = true;
+		recognition.lang = 'no-NB' 
+		recognition.start();
+
+		recognition.onstart = function(event){ 
+			console.log("onstart", event);
+		}   
+
+		recognition.onresult = function(event){ 
+			isCorrect(event.results[0][0].transcript, recognition);
+		}
+
+		recognition.onerror = function(event){
+			console.log("onerror", event);
+		}
+
+		recognition.onend = function(){ 
+			console.log("onend");
+		}
+	}
+
+	var correctAnswer = 'buskerud';
+	// startVoiceMonitoring();
 	getFylke(5, zoomIn);
 	// getKommune(425, drawLine);
 

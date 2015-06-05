@@ -47,9 +47,6 @@
 			.style('stroke', 'white');
 
 			action(path, projection, fylke);
-			// drawLine(path);
-			// zoomIn(path, projection, fylke);
-			// drawLine(path);
 		});
 	}
 

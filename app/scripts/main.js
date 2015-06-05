@@ -38,7 +38,7 @@
 			height - (bounds[0][1] + bounds[1][1])/2];
 
 
-			projection.scale(scale*0.8);
+			projection.scale(scale*0.7);
 
 			var path = vis.selectAll('path').data([json.features[identifier]]).enter().append('path')
 			.attr('d', fylke)
@@ -198,6 +198,7 @@ function OnQuestionDone(points) {
     var evt = $.Event('questionDone');
     evt.points = points;
 
+    vis.selectAll('path').remove();
     $(window).trigger(evt);
 }
 

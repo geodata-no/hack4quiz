@@ -1,18 +1,22 @@
+/* jshint undef: true, unused: false */
+/* global d3 */
+'use strict';
+
 (function () {
 
 	var width  = window.innerWidth;
 	var height = window.innerHeight;
 
-	var vis = d3.select("#vis").append("svg")
-	.attr("width", width).attr("height", height);
+	var vis = d3.select('#vis').append('svg')
+	.attr('width', width).attr('height', height);
 
 
 	function getFylke(fylkenr, action){
-		getOutline("geo/fylker.geojson", fylkenr, action);
+		getOutline('geo/fylker.geojson', fylkenr, action);
 	}
 
 	function getKommune(kommunenr, action){
-		getOutline("geo/kommuner.geojson", kommunenr, action);
+		getOutline('geo/kommuner.geojson', kommunenr, action);
 	}
 
 	function getOutline(input, identifier, action){
@@ -29,53 +33,53 @@
 			var bounds  = fylke.bounds(json.features[identifier]);
 			var hscale  = scale*width  / (bounds[1][0] - bounds[0][0]);
 			var vscale  = scale*height / (bounds[1][1] - bounds[0][1]);
-			var scale   = (hscale < vscale) ? hscale : vscale;
-			var offset  = [width - (bounds[0][0] + bounds[1][0])/2,
+			scale   = (hscale < vscale) ? hscale : vscale;
+			offset  = [width - (bounds[0][0] + bounds[1][0])/2,
 			height - (bounds[0][1] + bounds[1][1])/2];
 
 
 			projection.scale(scale*0.8);
 
-			var path = vis.selectAll("path").data([json.features[identifier]]).enter().append("path")
-			.attr("d", fylke)
-			.style("fill", "none")
-			.style("stroke-width", "2")
-			.style("stroke", "white");
+			var path = vis.selectAll('path').data([json.features[identifier]]).enter().append('path')
+			.attr('d', fylke)
+			.style('fill', 'none')
+			.style('stroke-width', '2')
+			.style('stroke', 'white');
 
 			action(path, projection, fylke);
 			// drawLine(path);
 			// zoomIn(path, projection, fylke);
 			// drawLine(path);
 		});
-}
+	}
 
-function drawLine(path){
-	var totalLength = path.node().getTotalLength();
+	function drawLine(path){
+		var totalLength = path.node().getTotalLength();
 
-	path
-	.attr("stroke-dasharray", totalLength + " " + totalLength)
-	.attr("stroke-dashoffset", totalLength)
-	.transition()
-	.duration(20000)
-	.ease("linear")
-	.attr("stroke-dashoffset", 0);
-}
+		path
+		.attr('stroke-dasharray', totalLength + ' ' + totalLength)
+		.attr('stroke-dashoffset', totalLength)
+		.transition()
+		.duration(20000)
+		.ease('linear')
+		.attr('stroke-dashoffset', 0);
+	}
 
-function zoomIn(path, projection, fylke){
-	var targetScale = projection.scale();
-	projection
-	.scale(20);
+	function zoomIn(path, projection, fylke){
+		var targetScale = projection.scale();
+		projection
+		.scale(20);
 
-	vis.selectAll("path")
-	.attr("d", fylke);
+		vis.selectAll('path')
+		.attr('d', fylke);
 
-	projection.scale(targetScale);
+		projection.scale(targetScale);
 
-	vis.selectAll("path")
-	.transition()
-	.duration(13000)
-	.attr("d", fylke);
-}
+		vis.selectAll('path')
+		.transition()
+		.duration(13000)
+		.attr('d', fylke);
+	}
 
 	getFylke(5, zoomIn);
 	// getKommune(425, drawLine);

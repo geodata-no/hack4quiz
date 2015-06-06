@@ -263,13 +263,14 @@ function initProgressBar(){
 $(window).on("questionDone", function(points){
 	console.log(points);
 	totalScore+= points.points;
+	$("#score-board").text(totalScore+" poeng");
 	showNextQuestion();
 });
 
 var progressbar = initProgressBar();
 	//getFylke(5, zoomIn);
 	var correctAnswer = 'buskerud';
-	// startVoiceMonitoring();
+	//startVoiceMonitoring();
 //	getFylke(5, zoomIn);
 
 	// getKommune(425, drawLine);

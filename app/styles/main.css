@@ -66,3 +66,9 @@ body {
   left: 10px;
   bottom: 10px;
 }
+
+#score-board{
+	position:fixed;
+	left:25px;
+	bottom:100px;
+}

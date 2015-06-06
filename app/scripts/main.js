@@ -272,12 +272,12 @@ var questionID = 0;
 function showNextQuestion(){
 	
 	$('#tscore').html(totalScore);
-    $('#score-board').html((questions.length - questionID)   +" spørsmål igjen");
+    $('#score-board').html((questions.length - questionID)   +' spørsmål igjen');
 	if(questionID >= questions.length){
 
 		//progressbar.destroy();
 		$('#progressbar').hide();
-		$('#scoreboard').html(totalScore +" poeng");
+		$('#scoreboard').html(totalScore +' poeng');
 		$('#question-text').hide();
 		$('.jumbotron').show();
 		
@@ -287,7 +287,7 @@ $('#progressbar').show();
 		var q = questions[questionID];
 
 
-		correctAnswer = q.answer.split("-").join(" ");
+		correctAnswer = q.answer.split('-').join(' ');
 
 		progressbar = progressbar || initProgressBar();
 		progressbar.set(0);
@@ -298,7 +298,7 @@ $('#progressbar').show();
 		});
 
 		q.func(q.identifier, q.action); 
-		console.log("Spørsmål.."+q.ask);
+		console.log('Spørsmål..'+q.ask);
 		console.log(correctAnswer);
 		$('#question-text').html(q.ask);
 		
@@ -338,10 +338,10 @@ function initProgressBar(){
 
 
 
-$(window).on("questionDone", function(points){
+$(window).on('questionDone', function(points){
 
 	totalScore+= points.points;
-	$("#tscore").html(totalScore);
+	$('#tscore').html(totalScore);
 	showNextQuestion();
 });
 var progressbar, correctAnswer;
@@ -358,7 +358,7 @@ showNextQuestion(); //Start the game
 }
 
 var loading_screen = pleaseWait({
-  logo: "images/hipsterlogo.png",
+  logo: 'images/hipsterlogo.png',
   backgroundColor: '#EFC94C',
   loadingHtml: '<h2>Test dine geografikunnskaper med denne quizen!</h2><h4>Snakk tydelig inn i mikrofonen når du vet hvilket fylke eller hvilken kommune geometrien representerer. Jo raskere du er jo mer poeng får du!</h4><button type="button" class="startbutton btn btn-lg btn-default">Start quiz!</button>'
 });

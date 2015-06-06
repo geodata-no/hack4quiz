@@ -201,7 +201,7 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 			choices: 419,
 			// twists: [zoomOut]
 			twists: [drawLine, zoomIn, zoomOut]
-		}]
+		})};
 
 
 

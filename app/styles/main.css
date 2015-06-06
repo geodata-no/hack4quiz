@@ -106,3 +106,10 @@ body {
 .startbutton:hover{
   background-color: #EFC94C;
 }
+
+#totalscore{
+    position: absolute;
+  bottom: 50px;
+  left: 27%;
+  color: white;
+}

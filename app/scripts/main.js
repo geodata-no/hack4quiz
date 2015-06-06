@@ -232,7 +232,7 @@ function showNextQuestion(){
 		var q = questions[questionID];
 
 
-		correctAnswer = q.answer;
+		correctAnswer = q.answer.split("-").join(" ");
 
 		progressbar.destroy();
 		progressbar = initProgressBar();
@@ -281,6 +281,8 @@ function initProgressBar(){
 
 
 $(window).on("questionDone", function(points){
+
+	console.log(points);
 	totalScore+= points.points;
 	showNextQuestion();
 });

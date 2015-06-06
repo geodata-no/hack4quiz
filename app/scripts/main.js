@@ -2,6 +2,7 @@
 /* global d3 */
 'use strict';
 var useKommune = true;
+var numQuestions = 3;
 var fylkeAnswers = $.getJSON('geo/fylker.geojson');
 var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 
@@ -192,17 +193,17 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 			// twists: [zoomOut]
 			twists: [drawLine, zoomIn, zoomOut]
 
-		}]
+		}];
 		
 		if(useKommune){
-		categories.push({
-			name:'kommune',
-			useFunc: getKommune,
-			choices: 419,
-			// twists: [zoomOut]
-			twists: [drawLine, zoomIn, zoomOut]
-		})};
-
+			categories.push({
+				name:'kommune',
+				useFunc: getKommune,
+				choices: 419,
+				// twists: [zoomOut]
+				twists: [drawLine, zoomIn, zoomOut]
+			});
+		}
 
 
 
@@ -248,14 +249,15 @@ var questionID = 0;
 
 function showNextQuestion(){
 	
+	$('#tscore').html(totalScore);
+    $('#score-board').html((questions.length - questionID)   +" spørsmål igjen");
 	if(questionID == questions.length){
-		console.log("FERDIG: "+ totalScore +" poeng");
 
 		//progressbar.destroy();
 		$('#progressbar').hide();
 		$('#question-text').hide();
 		$('.jumbotron').show();
-		$('#scoreboard').html(totalScore + " poeng");
+		
 		
 	}else{
 $('#progressbar').show();
@@ -279,7 +281,7 @@ $('#progressbar').show();
 		questionID++;
 	}
 	
-	$('#score-board').html(questionID  +"/ "+questions.length);
+
 
 }
 
@@ -316,18 +318,19 @@ function initProgressBar(){
 $(window).on("questionDone", function(points){
 
 	totalScore+= points.points;
-	$("#score-board").text(totalScore+" poeng");
+	$("#tscore").html(totalScore);
 	showNextQuestion();
 });
 var progressbar, correctAnswer;
 function init(){
 	progressbar = progressbar || initProgressBar();
 	correctAnswer = '';
-	questionID=0;
+	totalScore = 0;
+	questionID = 0;
 	startVoiceMonitoring();
 	totalScore = 0;
 	setTimeout(function(){
-		questions= generateQuestions(3);
+		questions = generateQuestions(numQuestions);
 showNextQuestion(); //Start the game
 }, 2000);
 }

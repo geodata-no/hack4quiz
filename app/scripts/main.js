@@ -2,6 +2,7 @@
 /* global d3 */
 'use strict';
 var useKommune = true;
+var numQuestions = 3;
 var fylkeAnswers = $.getJSON('geo/fylker.geojson');
 var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 
@@ -229,6 +230,8 @@ var questionID = 0;
 
 function showNextQuestion(){
 	
+	
+    $('#score-board').html((questions.length - questionID)   +" spørsmål igjen");
 	if(questionID == questions.length){
 		console.log("FERDIG: "+ totalScore +" poeng");
 
@@ -260,7 +263,7 @@ $('#progressbar').show();
 		questionID++;
 	}
 	
-	$('#score-board').html(questionID  +"/ "+questions.length);
+
 
 }
 
@@ -297,18 +300,18 @@ function initProgressBar(){
 $(window).on("questionDone", function(points){
 
 	totalScore+= points.points;
-	$("#score-board").text(totalScore+" poeng");
+	//$("#score-board").text(totalScore+" poeng");
 	showNextQuestion();
 });
 var progressbar, correctAnswer;
 function init(){
 	progressbar = progressbar || initProgressBar();
 	correctAnswer = '';
-	questionID=0;
+	questionID = 0;
 	startVoiceMonitoring();
 	totalScore = 0;
 	setTimeout(function(){
-		questions= generateQuestions(3);
+		questions = generateQuestions(numQuestions);
 showNextQuestion(); //Start the game
 }, 2000);
 }

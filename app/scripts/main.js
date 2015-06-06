@@ -255,6 +255,7 @@ function showNextQuestion(){
 
 		//progressbar.destroy();
 		$('#progressbar').hide();
+		$('#scoreboard').html(totalScore +" poeng");
 		$('#question-text').hide();
 		$('.jumbotron').show();
 		
@@ -328,7 +329,6 @@ function init(){
 	totalScore = 0;
 	questionID = 0;
 	startVoiceMonitoring();
-	totalScore = 0;
 	setTimeout(function(){
 		questions = generateQuestions(numQuestions);
 showNextQuestion(); //Start the game

@@ -6,6 +6,7 @@
     "d3": "~3.5.5",
     "jquery": "~2.1.4",
     "progressbar.js": "~0.8.1",
-    "bootstrap-social": "~4.9.0"
+    "bootstrap-social": "~4.9.0",
+    "please-wait": "~0.0.5"
   }
 }

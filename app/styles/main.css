@@ -92,3 +92,17 @@ body {
   font-size: 32px;
 
 }
+
+.startbutton{
+  background-color: black;
+  color: white;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin-top: 30px;
+}
+
+.startbutton:hover{
+  background-color: #EFC94C;
+}

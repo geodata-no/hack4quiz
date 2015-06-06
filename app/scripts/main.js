@@ -304,7 +304,18 @@ showNextQuestion(); //Start the game
 }, 1000);
 }
 
-init();
+var loading_screen = pleaseWait({
+  logo: "images/hipsterlogo.png",
+  backgroundColor: '#EFC94C',
+  loadingHtml: '<h2>Test dine geografikunnskaper med denne quizen!</h2><h4>Snakk tydelig inn i mikrofonen når du vet hvilket fylke eller hvilken kommune geometrien representerer. Jo raskere du er jo mer poeng får du!</h4><button type="button" class="startbutton btn btn-lg btn-default">Start quiz!</button>'
+});
+
+$('.startbutton').click(function(){
+	loading_screen.finish();
+	init();
+})
+
+// init();
 $('.tryagain').click(function(){
 	$('.jumbotron').hide();
 	$('#question-text').show().html('');

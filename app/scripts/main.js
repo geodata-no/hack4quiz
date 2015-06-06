@@ -65,7 +65,7 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 		.duration(15000)
 		.ease('linear')
 		.attr('stroke-dashoffset', 0).each("end", function(){
-			OnQuestionDone(10);
+			OnQuestionDone(0);
 		});
 	}
 
@@ -85,7 +85,7 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 		.transition()
 		.duration(15000)
 		.attr('d', fylke).each("end", function(){
-			OnQuestionDone(10);
+			OnQuestionDone(0);
 		});
 	}
 	
@@ -93,9 +93,14 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 	function isCorrect(guess, recognition){
 		if(guess.indexOf(correctAnswer.toLowerCase()) !== -1){
 			console.log('HELT RETT!');
-			OnQuestionDone(100);
+			$('#riktig').show();
+			setTimeout(function(){
+				$('#riktig').hide();
+			},1000)
+			OnQuestionDone(Math.round(progressbar.value()*-1000));
 		}
 		console.log('Gjettet: '+ guess);
+
 	}
 
 	function startVoiceMonitoring(){
@@ -222,7 +227,7 @@ function showNextQuestion(){
 	if(questionID == questions.length){
 		console.log("FERDIG: "+ totalScore +" poeng");
 
-		progressbar.destroy();
+		progressbar.stop();
 		$('#question-text').hide();
 		$('.jumbotron').show();
 		$('#scoreboard').html(totalScore + " poeng");
@@ -234,8 +239,8 @@ function showNextQuestion(){
 
 		correctAnswer = q.answer.split("-").join(" ");
 
-		progressbar.destroy();
-		progressbar = initProgressBar();
+		progressbar = progressbar || initProgressBar();
+		progressbar.set(0);
 
 		progressbar.animate(-1, function() {
 			console.log('tiden er ute!');
@@ -282,13 +287,12 @@ function initProgressBar(){
 
 $(window).on("questionDone", function(points){
 
-	console.log(points);
 	totalScore+= points.points;
 	showNextQuestion();
 });
 
 var progressbar = initProgressBar();
-var correctAnswer = 'buskerud';
+var correctAnswer = '';
 startVoiceMonitoring();
 
 setTimeout(function(){

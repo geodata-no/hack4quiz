@@ -127,7 +127,7 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 			setTimeout(function(){
 				$('#riktig').hide();
 			},1000)
-			OnQuestionDone((1000 - progressbar.value() * -999).toFixed(0));
+			OnQuestionDone(parseInt((1000 - progressbar.value() * -999).toFixed(0)));
 		}
 		console.log('Gjettet: '+ guess);
 

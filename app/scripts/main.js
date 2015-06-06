@@ -290,14 +290,23 @@ $(window).on("questionDone", function(points){
 	totalScore+= points.points;
 	showNextQuestion();
 });
+var progressbar, correctAnswer;
+function init(){
+	progressbar = progressbar || initProgressBar();
+	correctAnswer = '';
+	startVoiceMonitoring();
 
-var progressbar = initProgressBar();
-var correctAnswer = '';
-startVoiceMonitoring();
-
-setTimeout(function(){
-	questions= generateQuestions(3);
+	setTimeout(function(){
+		questions= generateQuestions(3);
 showNextQuestion(); //Start the game
 }, 1000);
+}
+
+init();
+$('.tryagain').click(function(){
+	$('.jumbotron').hide();
+	$('#question-text').show().html('');
+	init();
+});
 
 })();

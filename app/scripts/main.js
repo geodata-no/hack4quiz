@@ -1,7 +1,7 @@
 /* jshint undef: true, unused: false */
 /* global d3 */
 'use strict';
-
+var useKommune = true;
 var fylkeAnswers = $.getJSON('geo/fylker.geojson');
 var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 
@@ -83,8 +83,6 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 	}
 
 	function zoomIn(path, projection, fylke){
-
-		
 		var targetScale = projection.scale();
 		projection
 		.scale(20);
@@ -175,12 +173,16 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 			choices: 19,
 			twists: [drawLine, zoomIn]
 
-		}, {
+		}]
+		
+		if(useKommune){
+		categories.push({
 			name:'kommune',
 			useFunc: getKommune,
 			choices: 419,
 			twists: [drawLine, zoomIn]
-		}]
+		});
+		}
 
 
 
@@ -257,6 +259,8 @@ $('#progressbar').show();
 		$('#question-text').html(q.ask);
 		questionID++;
 	}
+	
+	$('#score-board').html(questionID  +"/ "+questions.length);
 
 }
 
@@ -276,7 +280,7 @@ function initProgressBar(){
 		strokeWidth: 3,
 		trailWidth: 2,
 		trailColor: 'black',
-		duration: 16000,
+		duration: 18000,
 		text: {
 			value: '0'
 		},

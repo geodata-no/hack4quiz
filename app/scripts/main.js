@@ -5,6 +5,19 @@
 var fylkeAnswers = $.getJSON('geo/fylker.geojson');
 var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 
+		var fylkeFeatures = []
+		fylkeAnswers.done(function(data){
+			console.log(data);
+			fylkeFeatures = data.features;
+		});
+
+
+		var kommuneFeatures = [];
+		kommuneAnswers.done(function(data){
+			console.log(data);
+			kommuneFeatures = data.features;
+		});
+
 (function () {
 
 	var width  = window.innerWidth;
@@ -154,18 +167,7 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 
 
 
-		var fylkeFeatures = []
-		fylkeAnswers.done(function(data){
-			console.log(data);
-			fylkeFeatures = data.features;
-		});
 
-
-		var kommuneFeatures = [];
-		kommuneAnswers.done(function(data){
-			console.log(data);
-			kommuneFeatures = data.features;
-		});
 
 		var categories = [{
 			name:'fylke',
@@ -200,6 +202,7 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 			answer: null
 		}
 		if(category.name=='kommune'){
+			console.log(identifier,kommuneFeatures[identifier]);
 			question.answer = kommuneFeatures[identifier].properties.NAVN
 			question.ask = 'Hvilken kommune er dette?';
 		}else if(category.name=='fylke'){ 
@@ -227,13 +230,14 @@ function showNextQuestion(){
 	if(questionID == questions.length){
 		console.log("FERDIG: "+ totalScore +" poeng");
 
-		progressbar.destroy();
+		//progressbar.destroy();
+		$('#progressbar').hide();
 		$('#question-text').hide();
 		$('.jumbotron').show();
 		$('#scoreboard').html(totalScore + " poeng");
 		
 	}else{
-
+$('#progressbar').show();
 		var q = questions[questionID];
 
 
@@ -272,7 +276,7 @@ function initProgressBar(){
 		strokeWidth: 3,
 		trailWidth: 2,
 		trailColor: 'black',
-		duration: 15000,
+		duration: 16000,
 		text: {
 			value: '0'
 		},
@@ -296,12 +300,13 @@ var progressbar, correctAnswer;
 function init(){
 	progressbar = progressbar || initProgressBar();
 	correctAnswer = '';
+	questionID=0;
 	startVoiceMonitoring();
-
+	totalScore = 0;
 	setTimeout(function(){
 		questions= generateQuestions(3);
 showNextQuestion(); //Start the game
-}, 1000);
+}, 2000);
 }
 
 init();

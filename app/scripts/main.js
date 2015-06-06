@@ -193,17 +193,17 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 			// twists: [zoomOut]
 			twists: [drawLine, zoomIn, zoomOut]
 
-		}]
+		}];
 		
 		if(useKommune){
-		categories.push({
-			name:'kommune',
-			useFunc: getKommune,
-			choices: 419,
-			// twists: [zoomOut]
-			twists: [drawLine, zoomIn, zoomOut]
-		}]
-
+			categories.push({
+				name:'kommune',
+				useFunc: getKommune,
+				choices: 419,
+				// twists: [zoomOut]
+				twists: [drawLine, zoomIn, zoomOut]
+			});
+		}
 
 
 

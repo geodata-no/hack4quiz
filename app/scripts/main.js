@@ -2,7 +2,7 @@
 /* global d3 */
 'use strict';
 
-var fylkeAnswers = $.getJSON("geo/fylker.geojson");
+var fylkeAnswers = $.getJSON('geo/fylker.geojson');
 var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 
 (function () {
@@ -64,8 +64,8 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 		.transition()
 		.duration(15000)
 		.ease('linear')
-		.attr('stroke-dashoffset', 0).each("end", function(){
-			OnQuestionDone(0);
+		.attr('stroke-dashoffset', 0).each('end', function(){
+			// OnQuestionDone(0);
 		});
 	}
 
@@ -84,8 +84,8 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 		vis.selectAll('path')
 		.transition()
 		.duration(15000)
-		.attr('d', fylke).each("end", function(){
-			OnQuestionDone(0);
+		.attr('d', fylke).each('end', function(){
+			// OnQuestionDone(0);
 		});
 	}
 	
@@ -111,7 +111,7 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 		recognition.start();
 
 		recognition.onstart = function(event){ 
-			console.log("onstart", event);
+			console.log('onstart', event);
 		}   
 		recognition.onresult = function(event){
 			var interim_transcript = '';
@@ -128,11 +128,11 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 		}
 
 		recognition.onerror = function(event){
-			console.log("onerror", event);
+			console.log('onerror', event);
 		}
 
 		recognition.onend = function(){ 
-			console.log("onend");
+			console.log('onend');
 		}
 	}
 
@@ -168,13 +168,13 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 		});
 
 		var categories = [{
-			name:"fylke",
+			name:'fylke',
 			useFunc: getFylke,
 			choices: 19,
 			twists: [drawLine, zoomIn]
 
 		}, {
-			name:"kommune",
+			name:'kommune',
 			useFunc: getKommune,
 			choices: 419,
 			twists: [drawLine, zoomIn]
@@ -193,18 +193,18 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 		var identifier = randInt(0,category.choices);
 		
 		var question = {
-			ask: "Hvilken "+category.name +" er dette?",
+			ask: 'Hvilken '+category.name +' er dette?',
 			func: category.useFunc,
 			identifier: identifier,
 			action: category.twists[randInt(0, category.twists.length)],
 			answer: null
 		}
-		if(category.name=="kommune"){
+		if(category.name=='kommune'){
 			question.answer = kommuneFeatures[identifier].properties.NAVN
-			question.ask = "Hvilken kommune er dette?";
-		}else if(category.name=="fylke"){ 
+			question.ask = 'Hvilken kommune er dette?';
+		}else if(category.name=='fylke'){ 
 			question.answer = fylkeFeatures[identifier].properties.NAVN
-			question.ask = "Hvilket fylke er dette?";
+			question.ask = 'Hvilket fylke er dette?';
 		}
 
 		console.log(question)
@@ -227,7 +227,7 @@ function showNextQuestion(){
 	if(questionID == questions.length){
 		console.log("FERDIG: "+ totalScore +" poeng");
 
-		progressbar.stop();
+		progressbar.destroy();
 		$('#question-text').hide();
 		$('.jumbotron').show();
 		$('#scoreboard').html(totalScore + " poeng");
@@ -244,6 +244,7 @@ function showNextQuestion(){
 
 		progressbar.animate(-1, function() {
 			console.log('tiden er ute!');
+			OnQuestionDone(0);
 		});
 
 		q.func(q.identifier, q.action); 

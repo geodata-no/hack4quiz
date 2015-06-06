@@ -7,14 +7,12 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 
 		var fylkeFeatures = []
 		fylkeAnswers.done(function(data){
-			console.log(data);
 			fylkeFeatures = data.features;
 		});
 
 
 		var kommuneFeatures = [];
 		kommuneAnswers.done(function(data){
-			console.log(data);
 			kommuneFeatures = data.features;
 		});
 
@@ -101,6 +99,26 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 			// OnQuestionDone(0);
 		});
 	}
+
+	function zoomOut(path, projection, fylke){
+
+		
+		var targetScale = projection.scale();
+		projection
+		.scale(targetScale*3);
+
+		vis.selectAll('path')
+		.attr('d', fylke);
+
+		projection.scale(targetScale);
+		
+		vis.selectAll('path')
+		.transition()
+		.duration(15000)
+		.attr('d', fylke).each('end', function(){
+			// OnQuestionDone(0);
+		});
+	}
 	
 
 	function isCorrect(guess, recognition){
@@ -173,13 +191,15 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 			name:'fylke',
 			useFunc: getFylke,
 			choices: 19,
-			twists: [drawLine, zoomIn]
+			// twists: [zoomOut]
+			twists: [drawLine, zoomIn, zoomOut]
 
 		}, {
 			name:'kommune',
 			useFunc: getKommune,
 			choices: 419,
-			twists: [drawLine, zoomIn]
+			// twists: [zoomOut]
+			twists: [drawLine, zoomIn, zoomOut]
 		}]
 
 

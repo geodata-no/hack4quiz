@@ -121,7 +121,7 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 	
 
 	function isCorrect(guess, recognition){
-		if(guess.indexOf(correctAnswer.toLowerCase()) !== -1){
+		if(guess.indexOf(correctAnswer.toLowerCase()) > -1){
 			console.log('HELT RETT!');
 			$('#riktig').show();
 			setTimeout(function(){
@@ -129,7 +129,7 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 			},1000)
 			OnQuestionDone(parseInt((1000 - progressbar.value() * -999).toFixed(0)));
 		}
-		console.log('Gjettet: '+ guess);
+		console.log('Gjettet: '+ guess + "("+guess.indexOf(correctAnswer.toLowerCase()) +")");
 
 	}
 
@@ -157,6 +157,28 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 			isCorrect(interim_transcript, recognition);
 		}
 
+		$(document).keydown(function(e) {
+    switch(e.which) {
+        case 37: // left
+        break;
+
+        case 38: // up
+		if(questionID <= questions.length){
+		isCorrect(correctAnswer.toLowerCase(), recognition)
+		}
+        break;
+
+        case 39: // right
+        break;
+
+        case 40: // down
+        break;
+
+        default: return; // exit this handler for other keys
+    }
+    e.preventDefault(); // prevent the default action (scroll / move caret)
+});
+		
 		recognition.onerror = function(event){
 			console.log('onerror', event);
 		}
@@ -251,7 +273,7 @@ function showNextQuestion(){
 	
 	$('#tscore').html(totalScore);
     $('#score-board').html((questions.length - questionID)   +" spørsmål igjen");
-	if(questionID == questions.length){
+	if(questionID >= questions.length){
 
 		//progressbar.destroy();
 		$('#progressbar').hide();
@@ -279,9 +301,9 @@ $('#progressbar').show();
 		console.log("Spørsmål.."+q.ask);
 		console.log(correctAnswer);
 		$('#question-text').html(q.ask);
-		questionID++;
+		
 	}
-	
+	questionID++;
 
 
 }

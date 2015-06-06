@@ -68,6 +68,11 @@ body {
   bottom: 10px;
 }
 
+#score-board{
+	position:fixed;
+	left:25px;
+	bottom:100px;
+}
 .jumbotron{
     margin-top: 100px;
   width: 700px;
@@ -85,4 +90,5 @@ body {
 .tryagianbutton{
   padding: 40px 64px;
   font-size: 32px;
+
 }

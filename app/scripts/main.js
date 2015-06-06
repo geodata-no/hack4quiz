@@ -288,6 +288,7 @@ function initProgressBar(){
 $(window).on("questionDone", function(points){
 
 	totalScore+= points.points;
+	$("#score-board").text(totalScore+" poeng");
 	showNextQuestion();
 });
 var progressbar, correctAnswer;

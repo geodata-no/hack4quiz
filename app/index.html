@@ -10,13 +10,28 @@
   <!-- build:css(.) styles/vendor.css -->
   <!-- bower:css -->
   <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="bower_components/bootstrap-social/bootstrap-social.css" />
   <!-- endbower -->
   <!-- endbuild -->
   <!-- build:css(.tmp) styles/main.css -->
   <link rel="stylesheet" href="styles/main.css">
   <!-- endbuild -->
-</head>
-<body>
+  <script type="text/javascript">
+    WebFontConfig = {
+      google: { families: [ 'Open+Sans::latin' ] }
+    };
+    (function() {
+      var wf = document.createElement('script');
+      wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+      '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+      wf.type = 'text/javascript';
+      wf.async = 'true';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(wf, s);
+    })(); </script>
+  </head>
+  <body>
     <!--[if lt IE 10]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
       <![endif]-->
@@ -24,14 +39,33 @@
 
       <!-- Begin page content -->
       <div class="container">
-        <div class="col-md-offset-2 col-md-8">
+        <div class=" col-xs-12">
           <!-- <div class="text-center"> -->
-            
+
           <!-- </div> -->
-          <h2 id="question-text">Hvilken kommune er dette?</h2>
+          <h2 class="text-center" id="question-text"></h2>
+          <div style="display: none;" class="jumbotron">
+            <h1 id="scoreboard" class="text-center">320 poeng</h1>
+            <h3 class="text-center">For en fantastisk poengsum. Har du jukset?</h3>
+            <div class="some text-center">
+              <h4><small>Del bragden på sosiale medier:</small></h4>
+              <a class="btn btn-social-icon btn-twitter">
+                <i class="fa fa-twitter"></i>
+              </a>
+              <a class="btn btn-social-icon btn-facebook">
+                <i class="fa fa-facebook"></i>
+              </a>
+            </a>
+            <a class="btn btn-social-icon btn-google">
+              <i class="fa fa-google"></i>
+            </a>
+          </div>
+          <p class="text-center tryagain"><a class="btn btn-success btn-lg tryagianbutton" href="#" role="button">Prøv på nytt!</a></p>
         </div>
-        <div id="vis"></div>
       </div>
+      <div id="vis"></div>
+      <div id="riktig" style="display: none; position: fixed; bottom: 0; left:47%;"><h2 class="text-center">Riktig!</h2></div>
+    </div>
 
 
 

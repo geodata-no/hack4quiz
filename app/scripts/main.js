@@ -9,6 +9,7 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 
 	var width  = window.innerWidth;
 	var height = window.innerHeight;
+	var recognition;
 
 
 	var vis = d3.select('#vis').append('svg')
@@ -61,10 +62,10 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 		.attr('stroke-dasharray', totalLength + ' ' + totalLength)
 		.attr('stroke-dashoffset', totalLength)
 		.transition()
-		.duration(13000)
+		.duration(15000)
 		.ease('linear')
 		.attr('stroke-dashoffset', 0).each("end", function(){
-			OnQuestionDone(10);
+			OnQuestionDone(0);
 		});
 	}
 
@@ -82,24 +83,28 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 		
 		vis.selectAll('path')
 		.transition()
-		.duration(13000)
+		.duration(15000)
 		.attr('d', fylke).each("end", function(){
-			OnQuestionDone(10);
+			OnQuestionDone(0);
 		});
 	}
 	
 
 	function isCorrect(guess, recognition){
-		if(guess === correctAnswer){
+		if(guess.indexOf(correctAnswer.toLowerCase()) !== -1){
 			console.log('HELT RETT!');
-			recognition.stop();
-			OnQuestionDone(100);
+			$('#riktig').show();
+			setTimeout(function(){
+				$('#riktig').hide();
+			},1000)
+			OnQuestionDone(Math.round(progressbar.value()*-1000));
 		}
-		console.log(guess);
+		console.log('Gjettet: '+ guess);
+
 	}
 
 	function startVoiceMonitoring(){
-		var recognition = new webkitSpeechRecognition();
+		recognition = new webkitSpeechRecognition();
 		recognition.continuous = true; 
 		recognition.interimResults = true;
 		recognition.lang = 'no-NB' 
@@ -108,8 +113,18 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 		recognition.onstart = function(event){ 
 			console.log("onstart", event);
 		}   
-		recognition.onresult = function(event){ 
-			isCorrect(event.results[0][0].transcript, recognition);
+		recognition.onresult = function(event){
+			var interim_transcript = '';
+			var final_transcript = '';
+
+			for (var i = event.resultIndex; i < event.results.length; ++i) {
+				if (event.results[i].isFinal) {
+					final_transcript += event.results[i][0].transcript;
+				} else {
+					interim_transcript += event.results[i][0].transcript;
+				}
+			}
+			isCorrect(interim_transcript, recognition);
 		}
 
 		recognition.onerror = function(event){
@@ -127,49 +142,49 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 	}
 
 
-function generateQuestions(numQuestions)
-{
-	var questions = []
-	var question = {
-		func: null,
-		identifier: null,
-		action: null,
-		answer: null
-	}
-	
-	
-	
-	var fylkeFeatures = []
-	fylkeAnswers.done(function(data){
-		console.log(data);
-	    fylkeFeatures = data.features;
-	});
-	
-	
-	var kommuneFeatures = [];
-	kommuneAnswers.done(function(data){
-		console.log(data);
-	    kommuneFeatures = data.features;
-	});
-	
-	var categories = [{
-		name:"fylke",
-		useFunc: getFylke,
-		choices: 19,
-		twists: [drawLine, zoomIn]
-		
-	}, {
-		name:"kommune",
-		useFunc: getKommune,
-		choices: 419,
-		twists: [drawLine, zoomIn]
-	}]
-	
-	
-	
+	function generateQuestions(numQuestions)
+	{
+		var questions = []
+		var question = {
+			func: null,
+			identifier: null,
+			action: null,
+			answer: null
+		}
 
-	for(var i = 0; i < numQuestions; i++){
-		
+
+
+		var fylkeFeatures = []
+		fylkeAnswers.done(function(data){
+			console.log(data);
+			fylkeFeatures = data.features;
+		});
+
+
+		var kommuneFeatures = [];
+		kommuneAnswers.done(function(data){
+			console.log(data);
+			kommuneFeatures = data.features;
+		});
+
+		var categories = [{
+			name:"fylke",
+			useFunc: getFylke,
+			choices: 19,
+			twists: [drawLine, zoomIn]
+
+		}, {
+			name:"kommune",
+			useFunc: getKommune,
+			choices: 419,
+			twists: [drawLine, zoomIn]
+		}]
+
+
+
+
+		for(var i = 0; i < numQuestions; i++){
+
 		//Fylke eller kommune
 		//Find category
 		var category = categories[randInt(0,categories.length)];
@@ -211,6 +226,11 @@ function showNextQuestion(){
 	
 	if(questionID == questions.length){
 		console.log("FERDIG: "+ totalScore +" poeng");
+
+		progressbar.stop();
+		$('#question-text').hide();
+		$('.jumbotron').show();
+		$('#scoreboard').html(totalScore + " poeng");
 		
 	}else{
 
@@ -219,17 +239,20 @@ function showNextQuestion(){
 
 		correctAnswer = q.answer.split("-").join(" ");
 
+		progressbar = progressbar || initProgressBar();
+		progressbar.set(0);
+
+		progressbar.animate(-1, function() {
+			console.log('tiden er ute!');
+		});
+
 		q.func(q.identifier, q.action); 
 		console.log("Spørsmål.."+q.ask);
+		console.log(correctAnswer);
 		$('#question-text').html(q.ask);
 		questionID++;
 	}
-	progressbar.destroy();
-	progressbar = initProgressBar();
 
-	progressbar.animate(-1, function() {
-		console.log('tiden er ute!');
-	});
 }
 
 function OnQuestionDone(points) {
@@ -237,6 +260,8 @@ function OnQuestionDone(points) {
 	evt.points = points;
 
 	vis.selectAll('path').remove();
+	correctAnswer = 'pasjdakosjasd';
+	progressbar.stop();
 	$(window).trigger(evt);
 }
 
@@ -246,7 +271,7 @@ function initProgressBar(){
 		strokeWidth: 3,
 		trailWidth: 2,
 		trailColor: 'black',
-		duration: 13000,
+		duration: 15000,
 		text: {
 			value: '0'
 		},
@@ -261,22 +286,20 @@ function initProgressBar(){
 
 
 $(window).on("questionDone", function(points){
-	console.log(points);
+
 	totalScore+= points.points;
 	$("#score-board").text(totalScore+" poeng");
 	showNextQuestion();
 });
 
 var progressbar = initProgressBar();
-	//getFylke(5, zoomIn);
-	var correctAnswer = 'buskerud';
-	//startVoiceMonitoring();
-//	getFylke(5, zoomIn);
 
-	// getKommune(425, drawLine);
+var correctAnswer = '';
+startVoiceMonitoring();
+
 setTimeout(function(){
-	questions= generateQuestions(3);
-showNextQuestion(); //Start the game
+	questions = generateQuestions(3);
+	showNextQuestion(); //Start the game
 }, 1000);
 
 })();

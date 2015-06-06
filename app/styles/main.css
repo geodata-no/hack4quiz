@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=Open+Sans);
+/*@import url(http://fonts.googleapis.com/css?family=Open+Sans);*/
 
 .browsehappy {
   margin: 0.2em 0;
@@ -65,4 +65,23 @@ body {
   position: fixed;
   left: 10px;
   bottom: 10px;
+}
+
+.jumbotron{
+    margin-top: 100px;
+  width: 700px;
+  background: white;
+}
+
+.some{
+  margin-top: 50px;
+}
+
+.tryagain{
+  margin: 40px;
+}
+
+.tryagianbutton{
+  padding: 40px 64px;
+  font-size: 32px;
 }

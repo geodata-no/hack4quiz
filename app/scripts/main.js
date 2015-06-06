@@ -8,14 +8,12 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 
 		var fylkeFeatures = []
 		fylkeAnswers.done(function(data){
-			console.log(data);
 			fylkeFeatures = data.features;
 		});
 
 
 		var kommuneFeatures = [];
 		kommuneAnswers.done(function(data){
-			console.log(data);
 			kommuneFeatures = data.features;
 		});
 
@@ -87,6 +85,26 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 		var targetScale = projection.scale();
 		projection
 		.scale(20);
+
+		vis.selectAll('path')
+		.attr('d', fylke);
+
+		projection.scale(targetScale);
+		
+		vis.selectAll('path')
+		.transition()
+		.duration(15000)
+		.attr('d', fylke).each('end', function(){
+			// OnQuestionDone(0);
+		});
+	}
+
+	function zoomOut(path, projection, fylke){
+
+		
+		var targetScale = projection.scale();
+		projection
+		.scale(targetScale*3);
 
 		vis.selectAll('path')
 		.attr('d', fylke);
@@ -172,7 +190,8 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 			name:'fylke',
 			useFunc: getFylke,
 			choices: 19,
-			twists: [drawLine, zoomIn]
+			// twists: [zoomOut]
+			twists: [drawLine, zoomIn, zoomOut]
 
 		}]
 		
@@ -181,9 +200,9 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 			name:'kommune',
 			useFunc: getKommune,
 			choices: 419,
-			twists: [drawLine, zoomIn]
-		});
-		}
+			// twists: [zoomOut]
+			twists: [drawLine, zoomIn, zoomOut]
+		}]
 
 
 

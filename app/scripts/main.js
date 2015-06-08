@@ -1,7 +1,7 @@
 /* jshint undef: true, unused: false */
 /* global d3 */
 'use strict';
-var useKommune = true;
+var useKommune = false;
 var numQuestions = 3;
 var fylkeAnswers = $.getJSON('geo/fylker.geojson');
 var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
@@ -123,6 +123,7 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 	function isCorrect(guess, recognition){
 		if(guess.indexOf(correctAnswer.toLowerCase()) > -1){
 			console.log('HELT RETT!');
+			rightAnswers++;
 			$('#riktig').show();
 			setTimeout(function(){
 				$('#riktig').hide();
@@ -267,7 +268,7 @@ var questions = null;
 
 var totalScore = 0;
 var questionID = 0;
-
+var rightAnswers = 0;
 
 function showNextQuestion(){
 	
@@ -278,15 +279,22 @@ function showNextQuestion(){
 		//progressbar.destroy();
 		$('#progressbar').hide();
 		$('#scoreboard').html(totalScore +' poeng');
+		
+		var rightText ="<h2>Riktige svar:</h2>";
+		questions.forEach(function(q){
+			rightText +=q.answer+"<br/>";
+		});
+		
+		console.log(rightText);
+		$('#correctanswer').html(rightText);
+		
+
 		$('#question-text').hide();
 		$('.jumbotron').show();
-		
 		
 	}else{
 $('#progressbar').show();
 		var q = questions[questionID];
-
-
 		correctAnswer = q.answer.split('-').join(' ');
 
 		progressbar = progressbar || initProgressBar();
@@ -350,6 +358,7 @@ function init(){
 	correctAnswer = '';
 	totalScore = 0;
 	questionID = 0;
+	rightAnswers = 0;
 	startVoiceMonitoring();
 	setTimeout(function(){
 		questions = generateQuestions(numQuestions);

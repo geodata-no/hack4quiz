@@ -3,7 +3,7 @@
 'use strict';
 var useKommune = false;
 var numQuestions = 3;
-var fylkeAnswers = $.getJSON('geo/fylker.geojson');
+var fylkeAnswers = $.getJSON('geo/simplifiedFylker.geojson');
 var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 
 var fylkeFeatures = [];

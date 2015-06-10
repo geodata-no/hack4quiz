@@ -1,21 +1,21 @@
 /* jshint undef: true, unused: false */
-/* global d3 */
+/* global d3, webkitSpeechRecognition, ProgressBar, pleaseWait */
 'use strict';
 var useKommune = false;
 var numQuestions = 3;
 var fylkeAnswers = $.getJSON('geo/fylker.geojson');
 var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 
-		var fylkeFeatures = []
-		fylkeAnswers.done(function(data){
-			fylkeFeatures = data.features;
-		});
+var fylkeFeatures = [];
+fylkeAnswers.done(function(data){
+	fylkeFeatures = data.features;
+});
 
 
-		var kommuneFeatures = [];
-		kommuneAnswers.done(function(data){
-			kommuneFeatures = data.features;
-		});
+var kommuneFeatures = [];
+kommuneAnswers.done(function(data){
+	kommuneFeatures = data.features;
+});
 
 (function () {
 
@@ -127,10 +127,10 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 			$('#riktig').show();
 			setTimeout(function(){
 				$('#riktig').hide();
-			},1000)
-			OnQuestionDone(parseInt((1000 - progressbar.value() * -999).toFixed(0)));
+			},1000);
+			new OnQuestionDone(parseInt((1000 - progressbar.value() * -999).toFixed(0)));
 		}
-		console.log('Gjettet: '+ guess + "("+guess.indexOf(correctAnswer.toLowerCase()) +")");
+		console.log('Gjettet: '+ guess + '('+guess.indexOf(correctAnswer.toLowerCase()) +')');
 
 	}
 
@@ -138,35 +138,35 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 		recognition = new webkitSpeechRecognition();
 		recognition.continuous = true; 
 		recognition.interimResults = true;
-		recognition.lang = 'no-NB' 
+		recognition.lang = 'no-NB';
 		recognition.start();
 
 		recognition.onstart = function(event){ 
 			console.log('onstart', event);
-		}   
+		};   
 		recognition.onresult = function(event){
-			var interim_transcript = '';
-			var final_transcript = '';
+			var interimTranscript = '';
+			var finalTranscript = '';
 
 			for (var i = event.resultIndex; i < event.results.length; ++i) {
 				if (event.results[i].isFinal) {
-					final_transcript += event.results[i][0].transcript;
+					finalTranscript += event.results[i][0].transcript;
 				} else {
-					interim_transcript += event.results[i][0].transcript;
+					interimTranscript += event.results[i][0].transcript;
 				}
 			}
-			isCorrect(interim_transcript, recognition);
-		}
+			isCorrect(interimTranscript, recognition);
+		};
 
 		$(document).keydown(function(e) {
-    switch(e.which) {
+			switch(e.which) {
         case 37: // left
         break;
 
         case 38: // up
-		if(questionID <= questions.length){
-		isCorrect(correctAnswer.toLowerCase(), recognition)
-		}
+        if(questionID <= questions.length){
+        	isCorrect(correctAnswer.toLowerCase(), recognition);
+        }
         break;
 
         case 39: // right
@@ -182,11 +182,11 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 		
 		recognition.onerror = function(event){
 			console.log('onerror', event);
-		}
+		};
 
 		recognition.onend = function(){ 
 			console.log('onend');
-		}
+		};
 	}
 
 	function randInt(min, max)
@@ -197,13 +197,13 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 
 	function generateQuestions(numQuestions)
 	{
-		var questions = []
+		var questions = [];
 		var question = {
 			func: null,
 			identifier: null,
 			action: null,
 			answer: null
-		}
+		};
 
 
 
@@ -239,23 +239,23 @@ var kommuneAnswers = $.getJSON('geo/kommuner.geojson');
 		
 		var identifier = randInt(0,category.choices);
 		
-		var question = {
+		question = {
 			ask: 'Hvilken '+category.name +' er dette?',
 			func: category.useFunc,
 			identifier: identifier,
 			action: category.twists[randInt(0, category.twists.length)],
 			answer: null
-		}
-		if(category.name=='kommune'){
+		};
+		if(category.name ==='kommune'){
 			console.log(identifier,kommuneFeatures[identifier]);
-			question.answer = kommuneFeatures[identifier].properties.NAVN
+			question.answer = kommuneFeatures[identifier].properties.NAVN;
 			question.ask = 'Hvilken kommune er dette?';
-		}else if(category.name=='fylke'){ 
-			question.answer = fylkeFeatures[identifier].properties.NAVN
+		}else if(category.name ==='fylke'){ 
+			question.answer = fylkeFeatures[identifier].properties.NAVN;
 			question.ask = 'Hvilket fylke er dette?';
 		}
 
-		console.log(question)
+		console.log(question);
 		questions.push(question);
 
 	}
@@ -273,16 +273,16 @@ var rightAnswers = 0;
 function showNextQuestion(){
 	
 	$('#tscore').html(totalScore);
-    $('#score-board').html((questions.length - questionID)   +' spørsmål igjen');
+	$('#score-board').html((questions.length - questionID)   +' spørsmål igjen');
 	if(questionID >= questions.length){
 
 		//progressbar.destroy();
 		$('#progressbar').hide();
 		$('#scoreboard').html(totalScore +' poeng');
 		
-		var rightText ="<h2>Riktige svar:</h2>";
+		var rightText ='<h2>Riktige svar:</h2>';
 		questions.forEach(function(q){
-			rightText +=q.answer+"<br/>";
+			rightText +=q.answer+'<br/>';
 		});
 		
 		console.log(rightText);
@@ -293,7 +293,7 @@ function showNextQuestion(){
 		$('.jumbotron').show();
 		
 	}else{
-$('#progressbar').show();
+		$('#progressbar').show();
 		var q = questions[questionID];
 		correctAnswer = q.answer.split('-').join(' ');
 
@@ -302,7 +302,7 @@ $('#progressbar').show();
 
 		progressbar.animate(-1, function() {
 			console.log('tiden er ute!');
-			OnQuestionDone(0);
+			new OnQuestionDone(0);
 		});
 
 		q.func(q.identifier, q.action); 
@@ -366,16 +366,16 @@ showNextQuestion(); //Start the game
 }, 2000);
 }
 
-var loading_screen = pleaseWait({
-  logo: 'images/hipsterlogo.png',
-  backgroundColor: '#EFC94C',
-  loadingHtml: '<h2>Test dine geografikunnskaper med denne quizen!</h2><h4>Snakk tydelig inn i mikrofonen når du vet hvilket fylke eller hvilken kommune geometrien representerer. Jo raskere du er jo mer poeng får du!</h4><button type="button" class="startbutton btn btn-lg btn-default">Start quiz!</button>'
+var loadingScreen = pleaseWait({
+	logo: 'images/hipsterlogo.png',
+	backgroundColor: '#EFC94C',
+	loadingHtml: '<h2>Test dine geografikunnskaper med denne quizen!</h2><h4>Snakk tydelig inn i mikrofonen når du vet hvilket fylke eller hvilken kommune geometrien representerer. Jo raskere du er jo mer poeng får du!</h4><button type="button" class="startbutton btn btn-lg btn-default">Start quiz!</button>'
 });
 
 $('.startbutton').click(function(){
-	loading_screen.finish();
+	loadingScreen.finish();
 	init();
-})
+});
 
 // init();
 $('.tryagain').click(function(){

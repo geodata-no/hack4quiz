@@ -13,6 +13,7 @@ The quiz has some twists. Each county is drawn with one of three effets:
 * ZoomOut
 * DrawLine
 
-The longer it takes the to guess the county the less points are awarded for the answer. The correct answer has to be delivered by speech. The quiz leverages the Web Speech API of the Google Chrome browser.
+The longer it takes the to guess the county the less points are awarded for the answer. The correct answer has to be delivered by speech. The quiz leverages the Web Speech API. Check your browser for compability(http://caniuse.com/#feat=web-speech). Our test show that Google Chrome works best.
 
 Three questions are asked per round and after each round will the total amount of point be displayed.
+

@@ -1,5 +1,7 @@
 #hack4quiz
 
+![hack4quiz](https://raw.githubusercontent.com/spohner/hack4quiz/master/app/images/promo.jpg)
+
 This is @spohner[https://twitter.com/spohner] and @kfoerde[https://twitter.com/kfoerde] entry for #hack4no 2015. 
 
 @spohner[https://twitter.com/spohner] and @kfoerde[https://twitter.com/kfoerde] works as developers for @GeodataAS.

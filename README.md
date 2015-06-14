@@ -2,9 +2,9 @@
 
 ![hack4quiz](https://raw.githubusercontent.com/spohner/hack4quiz/master/app/images/promo.jpg)
 
-This is @spohner[https://twitter.com/spohner] and @kfoerde[https://twitter.com/kfoerde] entry for #hack4no 2015. 
+This is [@spohner](https://twitter.com/spohner) and [@kfoerde](https://twitter.com/kfoerde) entry for [#hack4no 2015](http://www.hack4.no/hack4/). 
 
-@spohner[https://twitter.com/spohner] and @kfoerde[https://twitter.com/kfoerde] works as developers for @GeodataAS.
+[@spohner](https://twitter.com/spohner) and [@kfoerde](https://twitter.com/kfoerde) works as developers for [@GeodataAS](http://www.geodata.no).
 
 \#hack4quiz is an entertaining quiz which goal is to identify the correct norwegian county (fylke). There is also possible to guess municipalities (kommuner), but this was found to be very hard. You are warned! 
 
